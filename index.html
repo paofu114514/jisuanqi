@@ -4,7 +4,143 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>计算器</title>
-    <link rel="stylesheet" href="jisuangi.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .calculator-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        .calc-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .display {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 28px;
+            text-align: right;
+            margin-bottom: 20px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            color: #333;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 18px 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 60px;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .num-btn {
+            background: #fff;
+            color: #333;
+            border: 2px solid #e9ecef;
+        }
+
+        .num-btn:hover {
+            background: #f8f9fa;
+            border-color: #667eea;
+        }
+
+        .op-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .op-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .func-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .func-btn:hover {
+            background: #5a6268;
+        }
+
+        .eq-btn {
+            background: #28a745;
+            color: white;
+            grid-column: span 1;
+        }
+
+        .eq-btn:hover {
+            background: #218838;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 480px) {
+            .calculator-container {
+                padding: 15px;
+            }
+            
+            .btn {
+                padding: 15px 8px;
+                font-size: 16px;
+                min-height: 50px;
+            }
+            
+            .display {
+                font-size: 24px;
+                padding: 15px;
+                min-height: 70px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="calculator-container">
@@ -14,47 +150,41 @@
         <!-- 显示屏（显示输入和结果） -->
         <div class="display" id="display">0</div>
 
-        <!-- 按钮区域（按原Python脚本布局排列） -->
+        <!-- 按钮区域 -->
         <div class="buttons">
             <!-- 第一行：归零、小数点、取模、百分号 -->
             <button class="btn func-btn" onclick="reset()">归零</button>
             <button class="btn func-btn" onclick="appendChar('.')">.</button>
-            <button class="btn func-btn" onclick="appendChar('%')">取模</button>
-            <button class="btn op-btn" onclick="appendChar('/100')">%</button>
+            <button class="btn func-btn" onclick="appendChar('%')">%</button>
+            <button class="btn op-btn" onclick="appendChar('/')">÷</button>
 
-            <!-- 第二行：7、8、9、除法 -->
+            <!-- 第二行：7、8、9、乘法 -->
             <button class="btn num-btn" onclick="appendChar('7')">7</button>
             <button class="btn num-btn" onclick="appendChar('8')">8</button>
             <button class="btn num-btn" onclick="appendChar('9')">9</button>
-            <button class="btn op-btn" onclick="appendChar('/')">÷</button>
+            <button class="btn op-btn" onclick="appendChar('*')">×</button>
 
-            <!-- 第三行：4、5、6、乘法 -->
+            <!-- 第三行：4、5、6、减法 -->
             <button class="btn num-btn" onclick="appendChar('4')">4</button>
             <button class="btn num-btn" onclick="appendChar('5')">5</button>
             <button class="btn num-btn" onclick="appendChar('6')">6</button>
-            <button class="btn op-btn" onclick="appendChar('*')">×</button>
+            <button class="btn op-btn" onclick="appendChar('-')">-</button>
 
-            <!-- 第四行：1、2、3、减法 -->
+            <!-- 第四行：1、2、3、加法 -->
             <button class="btn num-btn" onclick="appendChar('1')">1</button>
             <button class="btn num-btn" onclick="appendChar('2')">2</button>
             <button class="btn num-btn" onclick="appendChar('3')">3</button>
-            <button class="btn op-btn" onclick="appendChar('-')">-</button>
-
-            <!-- 第五行：0、平方（x↑y）、π、加法 -->
-            <button class="btn num-btn" onclick="appendChar('0')">0</button>
-            <button class="btn func-btn" onclick="appendChar('**')">x↑y</button>
-            <button class="btn func-btn" onclick="appendChar('3.14')">pi[π]</button>
             <button class="btn op-btn" onclick="appendChar('+')">+</button>
 
-            <!-- 第六行：括号、退格、等号 -->
+            <!-- 第五行：0、括号、退格、等号 -->
+            <button class="btn num-btn" onclick="appendChar('0')" style="grid-column: span 2;">0</button>
             <button class="btn func-btn" onclick="appendChar('(')">(</button>
             <button class="btn func-btn" onclick="appendChar(')')">)</button>
-            <button class="btn func-btn" onclick="backspace()">退格</button>
-            <button class="btn eq-btn" onclick="calculate()">=</button>
+            <button class="btn func-btn" onclick="backspace()">?</button>
+            <button class="btn eq-btn" onclick="calculate()" style="grid-column: span 4;">=</button>
         </div>
     </div>
 
-    <!-- JavaScript 交互逻辑 -->
     <script>
         // 存储输入的表达式
         let input = '';
@@ -62,50 +192,5 @@
 
         // 1. 追加字符到表达式
         function appendChar(char) {
-            // 初始为0时，输入数字直接替换（避免显示"0123"）
-            if (input === '' && !isNaN(char)) {
-                input = char;
-            } else {
-                input += char;
-            }
-            updateDisplay();
-        }
-
-        // 2. 更新显示屏
-        function updateDisplay() {
-            display.textContent = input === '' ? '0' : input;
-        }
-
-        // 3. 计算表达式（对应原Python的dengyu函数）
-        function calculate() {
-            try {
-                // 安全地计算数学表达式
-                if (input.includes('%')) {
-                    input = input.replace(/%/g, '/100');
-                }
-                const result = eval(input);
-                input = result.toString();
-                updateDisplay();
-            } catch (error) {
-                input = '';
-                display.textContent = '错误';
-            }
-        }
-
-        // 4. 重置计算器（对应原Python的gui_ling函数）
-        function reset() {
-            input = '';
-            updateDisplay();
-        }
-
-        // 5. 退格功能（删除最后一个字符）
-        function backspace() {
-            input = input.slice(0, -1);
-            updateDisplay();
-        }
-
-        // 6. 初始化显示
-        updateDisplay();
-    </script>
-</body>
-</html>
+            // 如果当前显示是0或者是"错误"，且输入的是数字，则替换
+            if ((display.textContent === '0' 
