@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算器</title>
+    <!-- 引入CSS样式文件 -->
+    <link rel="stylesheet" href="calculator.css">
+</head>
+<body>
+    <div class="calculator-container">
+        <!-- 标题栏 -->
+        <div class="calc-title">计算器</div>
+
+        <!-- 显示屏（显示输入和结果） -->
+        <div class="display" id="display">0</div>
+
+        <!-- 按钮区域（按原Python脚本布局排列） -->
+        <div class="buttons">
+            <!-- 第一行：归零、小数点、取模、百分号 -->
+            <button class="btn func-btn" onclick="reset()">归零</button>
+            <button class="btn func-btn" onclick="appendChar('.')">.</button>
+            <button class="btn func-btn" onclick="appendChar('%')">取模</button>
+            <button class="btn op-btn" onclick="appendChar('/100')">%</button>
+
+            <!-- 第二行：7、8、9、除法 -->
+            <button class="btn num-btn" onclick="appendChar('7')">7</button>
+            <button class="btn num-btn" onclick="appendChar('8')">8</button>
+            <button class="btn num-btn" onclick="appendChar('9')">9</button>
+            <button class="btn op-btn" onclick="appendChar('/')">÷</button>
+
+            <!-- 第三行：4、5、6、乘法 -->
+            <button class="btn num-btn" onclick="appendChar('4')">4</button>
+            <button class="btn num-btn" onclick="appendChar('5')">5</button>
+            <button class="btn num-btn" onclick="appendChar('6')">6</button>
+            <button class="btn op-btn" onclick="appendChar('*')">×</button>
+
+            <!-- 第四行：1、2、3、减法 -->
+            <button class="btn num-btn" onclick="appendChar('1')">1</button>
+            <button class="btn num-btn" onclick="appendChar('2')">2</button>
+            <button class="btn num-btn" onclick="appendChar('3')">3</button>
+            <button class="btn op-btn" onclick="appendChar('-')">-</button>
+
+            <!-- 第五行：0、平方（x↑y）、π、加法 -->
+            <button class="btn num-btn" onclick="appendChar('0')">0</button>
+            <button class="btn func-btn" onclick="appendChar('**')">x↑y</button>
+            <button class="btn func-btn" onclick="appendChar('3.14')">pi[π]</button>
+            <button class="btn op-btn" onclick="appendChar('+')">+</button>
+
+            <!-- 第六行：括号、退格、等号 -->
+            <button class="btn func-btn" onclick="appendChar('(')">(</button>
+            <button class="btn func-btn" onclick="appendChar(')')">)</button>
+            <button class="btn func-btn" onclick="backspace()">退格</button>
+            <button class="btn eq-btn" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <!-- JavaScript 交互逻辑（复刻原Python功能） -->
+    <script>
+        // 存储输入的表达式（对应原Python的num列表）
+        let input = '';
+        const display = document.getElementById('display');
+
+        // 1. 追加字符到表达式（对应原Python的n1~n9、jia/chen等函数）
+        function appendChar(char) {
+            // 初始为0时，输入数字直接替换（避免显示“0123”）
+            if (input === '' && !isNaN(char)
